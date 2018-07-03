@@ -1,6 +1,7 @@
 #!/usr/bin/with-contenv sh
 
-create_agent_token()
+{{- if (getenv "SCHEDULER_CONTAINER_INDEX") }}
+create_token()
 {
     response=0
     while [ $response -ne 200 ]; do
@@ -9,9 +10,18 @@ create_agent_token()
         response=$(curl --write-out %{http_code} --silent --output /dev/null --request PUT --header "X-Consul-Token: {{getv "/config/mastertoken"}}" --data '{"Name": "Agent Token", "ID": "{{getv "/config/agenttoken"}}","Type": "client","Rules": "node \"\" { policy = \"write\" } service \"\" { policy = \"read\" }"}' http://127.0.0.1:8500/v1/acl/create)
     done
     echo "Agent token successfully created."
+    
+{{- if (exists "/config/vaulttoken") }}
+    response=0
+    while [ $response -ne 200 ]; do
+        echo "Try to create Vault token..."
+        sleep 10
+        response=$(curl --write-out %{http_code} --silent --output /dev/null --request PUT --header "X-Consul-Token: {{getv "/config/mastertoken"}}" --data '{"Name": "Vault Token", "ID": "{{getv "/config/vaulttoken"}}","Type": "client","Rules": "{\"key\":{\"vault/\":{\"policy\":\"write\"}},\"node\":{\"\":{\"policy\":\"write\"}},\"service\":{\"vault\":{\"policy\":\"write\"}},\"agent\":{\"\":{\"policy\":\"write\"}},\"session\":{\"\":{\"policy\":\"write\"}}}"}' http://127.0.0.1:8500/v1/acl/create)
+    done
+    echo "Vault token successfully created."
+{{- end }}
 }
 
-{{- if (getenv "SCHEDULER_CONTAINER_INDEX") }}
 if [ "{{ getenv "SCHEDULER_CONTAINER_INDEX" }}" == "2" ] && [ ! -f ${APP_HOME}/data/.init ]; then
     touch ${APP_HOME}/data/.init
     create_agent_token &
