@@ -24,4 +24,4 @@ The Minio setting is managed by Confd. So you can custom it:
 - **CONSUL_CONFIG_AGENTTOKEN**: The agent token.
 - **CONSUL_CONFIG_LOGLEVEL**: The log level. Default to `INFO`.
 - **CONSUL_CONFIG_HOSTS_X**: The list of servers to create cluster (3 or 5 servers). Default is empty.
-- **CONSUL_CONFIG_ISBOOTSTRAP**: The node that bootstrap the consul cluster.
+- **CONSUL_CONFIG_EXPECTEDBOOTSTRAP**: The number of node to wait before start bootstrap.

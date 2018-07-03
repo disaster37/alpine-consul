@@ -17,10 +17,21 @@
 {{- if (getenv "SCHEDULER_CONTAINERS_IP") }}
 {{- $servers := split (getenv "SCHEDULER_CONTAINERS_IP") "," }}
     "start_join" : [{{range $i, $ip := $servers}}{{if eq $i 0}}"{{$ip}}"{{else}},"{{$ip}}"{{end}}{{end}}],
+    "retry_join": [{{range $i, $ip := $servers}}{{if eq $i 0}}"{{$ip}}"{{else}},"{{$ip}}"{{end}}{{end}}],
 {{- else if (len (ls "/config/hosts")) }}
     "start_join" : [{{range $i, $host := getvs "/config/hosts/*"}}{{if eq $i 0}}"{{$host}}"{{else}},"{{$host}}"{{end}}{{end}}],
+    "retry_join" : [{{range $i, $host := getvs "/config/hosts/*"}}{{if eq $i 0}}"{{$host}}"{{else}},"{{$host}}"{{end}}{{end}}],
 {{- end }}
     "ui" : true,
+    "leave_on_terminate": false,
+    "skip_leave_on_interrupt": false,
+    "rejoin_after_leave": true,
+{{- if (getenv "SCHEDULER_SERVICE_SCALE") }}
+    "bootstrap_expect" : {{getenv "SCHEDULER_SERVICE_SCALE" }},
+{{- else }}
+    "bootstrap_expect" : {{getv "/config/expectedbootstrap" }},
+{{- end }}
+
     "acl_agent_token": "{{getv "/config/agenttoken"}}",
     "acl_datacenter": "{{getv "/config/datacenter" "default"}}",
     "acl_default_policy": "deny",

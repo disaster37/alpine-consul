@@ -11,17 +11,6 @@ keys = [
 ]
 EOF
 
-cat << EOF > ${CONFD_HOME}/etc/conf.d/bootstrap.json.toml
-[template]
-prefix = "${CONFD_PREFIX_KEY}"
-src = "bootstrap.json.tmpl"
-dest = "${APP_HOME}/bootstrap/config.json"
-mode = "0744"
-keys = [
-  "/config",
-]
-EOF
-
 cat << EOF > ${CONFD_HOME}/etc/conf.d/run.toml
 [template]
 prefix = "${CONFD_PREFIX_KEY}"
