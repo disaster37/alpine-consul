@@ -4,13 +4,13 @@ cd ${APP_HOME}
 
 # Check if bootstrap is needed (first execution)
 {{- if (getenv "SCHEDULER_CONTAINER_INDEX") }}
-if [ (${SCHEDULER_CONTAINER_INDEX} == "0") AND (! -f ${APP_HOME}/state/.init) ]; then
+if [ ${SCHEDULER_CONTAINER_INDEX} == "0" ] && [ ! -f ${APP_HOME}/state/.init ]; then
     touch ${APP_HOME}/state/.init
     sleep 30
     su ${USER} -c "${APP_HOME}/bin/consul agent -config-dir=${APP_HOME}/bootstrap"
 fi
 {{- else }}
-if [ ("{{getv "/config/isbootstrap" "false"}}" == "true") AND (! -f ${APP_HOME}/state/.init) ]; then
+if [ "{{getv "/config/isbootstrap" "false"}}" == "true" ] && [ ! -f ${APP_HOME}/state/.init ]; then
     touch ${APP_HOME}/state/.init
     sleep 30
     su ${USER} -c "${APP_HOME}/bin/consul agent -config-dir=${APP_HOME}/bootstrap"
