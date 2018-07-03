@@ -1,5 +1,22 @@
 #!/usr/bin/with-contenv sh
 
-cd ${APP_HOME}
+create_agent_token()
+{
+    response=0
+    while [ $response nq 200 ]; do
+        echo "Try to create Agent token..."
+        sleep 10
+        response=$(curl --write-out %{http_code} --silent --output /dev/null --request PUT --header "X-Consul-Token: {{getv "/config/mastertoken"}}" --data '{"Name": "Agent Token", "ID": "{{getv "/config/agenttoken"}}","Type": "client","Rules": "node \"\" { policy = \"write\" } service \"\" { policy = \"read\" }"}' http://127.0.0.1:8500/v1/acl/create)
+    done
+    echo "Agent token successfully created."
+}
 
+{{- if (getenv "SCHEDULER_CONTAINER_INDEX") }}
+if [ "{{ getenv "SCHEDULER_CONTAINER_INDEX" }}" == "2" ] && [ ! -f ${APP_HOME}/data/.init ]; then
+    touch ${APP_HOME}/data/.init
+    create_agent_token &
+fi
+{{- end }}
+
+cd ${APP_HOME}
 su ${USER} -c "${APP_HOME}/bin/consul agent -server -config-dir=${APP_HOME}/conf"
