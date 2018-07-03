@@ -1,0 +1,12 @@
+#!/usr/bin/with-contenv sh
+
+cd ${APP_HOME}
+
+# Check if bootstrap is needed (first execution)
+if [ ! -f ${APP_HOME}/state/.init ]; then
+    touch ${APP_HOME}/state/.init
+    sleep 30
+    su ${USER} -c "${APP_HOME}/bin/consul agent -config-dir=${APP_HOME}/bootstrap"
+fi
+
+su ${USER} -c "${APP_HOME}/bin/consul agent -server -config-dir=${APP_HOME}/config"

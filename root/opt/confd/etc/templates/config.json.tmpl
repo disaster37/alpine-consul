@@ -1,0 +1,24 @@
+{
+    "bootstrap" : false,
+{{- if (getenv "SCHEDULER_CONTAINER_NAME") }}
+    "node_name" : "{{getenv "SCHEDULER_CONTAINER_NAME"}}"
+{{- else if (exists "/config/nodename") }}
+    "node_name" : "{{getv "/config/nodename"}}"
+{{- end }}
+    "server" : true,
+    "datacenter": "{{getv "/config/datacenter" "default"}}",
+    "data_dir" : "{{getenv "APP_HOME"}}/data",
+    "encrypt" : "{{getv "/config/cryptkey"}}",
+    "log_level" : "{{getv "config/loglevel" "INFO"}}",
+    "enable_syslog" : false,
+    "addresses" : {
+        "http" : "0.0.0.0"
+    },
+{{- if (getenv "SCHEDULER_CONTAINERS_IP") }}
+{{- $servers := split (getenv "SCHEDULER_CONTAINERS_IP") "," }}
+    "start_join" : [{{range $i, $ip := $servers}}{{if eq $i 0}}"{{$ip}}"{{else}},"{{$ip}}"{{end}}{{end}}],
+{{- else if (len (ls "/config/hosts")) }}
+    "start_join" : [{{range $i, $host := getvs "/config/hosts/*"}}{{if eq $i 0}}"{{$host}}"{{else}},"{{$host}}"{{end}}{{end}}],
+{{- end }}
+    "ui" : true
+}
