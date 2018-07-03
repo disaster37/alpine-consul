@@ -1,9 +1,9 @@
 {
     "bootstrap" : true,
 {{- if (getenv "SCHEDULER_CONTAINER_NAME") }}
-    "node_name" : "{{getenv "SCHEDULER_CONTAINER_NAME"}}"
+    "node_name" : "{{getenv "SCHEDULER_CONTAINER_NAME"}}",
 {{- else if (exists "/config/nodename") }}
-    "node_name" : "{{getv "/config/nodename"}}"
+    "node_name" : "{{getv "/config/nodename"}}",
 {{- end }}
     "server" : true,
     "datacenter": "{{getv "/config/datacenter" "default"}}",
