@@ -3,7 +3,7 @@
 create_agent_token()
 {
     response=0
-    while [ $response nq 200 ]; do
+    while [ $response -ne 200 ]; do
         echo "Try to create Agent token..."
         sleep 10
         response=$(curl --write-out %{http_code} --silent --output /dev/null --request PUT --header "X-Consul-Token: {{getv "/config/mastertoken"}}" --data '{"Name": "Agent Token", "ID": "{{getv "/config/agenttoken"}}","Type": "client","Rules": "node \"\" { policy = \"write\" } service \"\" { policy = \"read\" }"}' http://127.0.0.1:8500/v1/acl/create)
