@@ -9,6 +9,7 @@ if [ "{{ getenv "SCHEDULER_CONTAINER_INDEX" }}" == "2" ] && [ ! -f ${APP_HOME}/s
     echo "Bootstraping the Consul cluster..."
     sleep 30
     su ${USER} -c "${APP_HOME}/bin/consul agent -config-dir=${APP_HOME}/bootstrap"
+    echo "Bootstraping is finished."
 fi
 {{- else }}
 if [ "{{getv "/config/isbootstrap" "false"}}" == "true" ] && [ ! -f ${APP_HOME}/state/.init ]; then

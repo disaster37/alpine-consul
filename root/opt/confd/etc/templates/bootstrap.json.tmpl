@@ -21,6 +21,7 @@
     "start_join" : [{{range $i, $host := getvs "/config/hosts/*"}}{{if eq $i 0}}"{{$host}}"{{else}},"{{$host}}"{{end}}{{end}}],
 {{- end }}
     "ui" : true,
+    "acl_agent_token": "{{getv "/config/agenttoken"}}",
     "acl_datacenter": "{{getv "/config/datacenter" "default"}}",
     "acl_default_policy": "deny",
     "acl_down_policy": "deny",
