@@ -24,7 +24,7 @@ create_token()
 
 if [ "{{ getenv "SCHEDULER_CONTAINER_INDEX" }}" == "2" ] && [ ! -f ${APP_HOME}/data/.init ]; then
     touch ${APP_HOME}/data/.init
-    create_agent_token &
+    create_token &
 fi
 {{- end }}
 
