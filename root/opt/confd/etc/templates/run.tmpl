@@ -4,7 +4,7 @@ cd ${APP_HOME}
 
 # Check if bootstrap is needed (first execution)
 {{- if (getenv "SCHEDULER_CONTAINER_INDEX") }}
-if [ ${SCHEDULER_CONTAINER_INDEX} == "1" ] && [ ! -f ${APP_HOME}/state/.init ]; then
+if [ "{{ getenv "SCHEDULER_CONTAINER_INDEX" }}" == "2" ] && [ ! -f ${APP_HOME}/state/.init ]; then
     touch ${APP_HOME}/state/.init
     echo "Bootstraping the Consul cluster..."
     sleep 30
