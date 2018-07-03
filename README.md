@@ -22,3 +22,4 @@ The Minio setting is managed by Confd. So you can custom it:
 - **CONSUL_CONFIG_CRYPTKEY**: The encrypt key (16-bit base-64 encoded string). You can generate it with consul keygen. No default value.
 - **CONSUL_CONFIG_LOGLEVEL**: The log level. Default to `INFO`.
 - **CONSUL_CONFIG_HOSTS_X**: The list of servers to create cluster (3 or 5 servers). Default is empty.
+- **CONSUL_CONFIG_ISBOOTSTRAP**: The node that bootstrap the consul cluster.

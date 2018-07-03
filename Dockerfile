@@ -40,7 +40,7 @@ RUN curl -sL https://github.com/just-containers/s6-overlay/releases/download/v1.
 
 # Install Consul software
 RUN \
-    mkdir -p ${APP_HOME}/bin ${APP_HOME}/conf ${APP_HOME}/bootstrap ${APP_HOME}/data ${APP_HOME}/state  && \
+    mkdir -p ${APP_HOME}/bin ${APP_HOME}/conf ${APP_HOME}/bootstrap ${APP_HOME}/data  && \
     curl https://releases.hashicorp.com/consul/${APP_VERSION}/consul_${APP_VERSION}_linux_amd64.zip -o /tmp/consul.zip &&\
     unzip /tmp/consul.zip -d /tmp &&\
     ls -al /tmp/consul &&\
@@ -54,7 +54,7 @@ ADD root /
 RUN chown -R ${USER}:${GROUP} ${APP_HOME}
 
 
-VOLUME ["${APP_HOME}/data", "${APP_HOME}/state"]
+VOLUME ["${APP_HOME}/data"]
 
 # Server RPC is used for communication between Consul clients and servers for internal
 # request forwarding.
