@@ -20,5 +20,9 @@
 {{- else if (len (ls "/config/hosts")) }}
     "start_join" : [{{range $i, $host := getvs "/config/hosts/*"}}{{if eq $i 0}}"{{$host}}"{{else}},"{{$host}}"{{end}}{{end}}],
 {{- end }}
-    "ui" : true
+    "ui" : true,
+    "acl_datacenter": "{{getv "/config/datacenter" "default"}}",
+    "acl_default_policy": "deny",
+    "acl_down_policy": "deny",
+    "acl_master_token": "{{getv "/config/mastertoken"}}"
 }
